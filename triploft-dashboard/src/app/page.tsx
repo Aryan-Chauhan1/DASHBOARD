@@ -18,6 +18,7 @@ import {
   featureRequests,
   featuresShipped,
   openBugs,
+  productItems,
 } from "@/lib/data";
 import { formatDistanceToNow } from "date-fns";
 
@@ -29,19 +30,19 @@ function PageHeader() {
           Overview
         </h1>
         <p className="text-sm mt-0.5" style={{ color: "var(--text-secondary)" }}>
-          Sunday, June 15, 2026 — What requires attention right now?
+          Sun Jun 15, 2026 — Linear: 150 issues synced · Intercom: workspace live
         </p>
       </div>
       <div
         className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium"
         style={{
-          background: "rgba(239,68,68,0.1)",
-          color: "#ef4444",
-          border: "1px solid rgba(239,68,68,0.2)",
+          background: "rgba(245,158,11,0.1)",
+          color: "#f59e0b",
+          border: "1px solid rgba(245,158,11,0.2)",
         }}
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-        2 Critical Issues Active
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+        45 items awaiting QA
       </div>
     </div>
   );
@@ -52,59 +53,58 @@ function AttentionBanner() {
     <div
       className="rounded-xl p-4 mb-6 flex items-start gap-4"
       style={{
-        background: "rgba(239,68,68,0.08)",
-        border: "1px solid rgba(239,68,68,0.2)",
+        background: "rgba(245,158,11,0.07)",
+        border: "1px solid rgba(245,158,11,0.2)",
       }}
     >
-      <AlertTriangle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
+      <AlertTriangle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-red-400">Needs immediate action</p>
+        <p className="text-sm font-semibold text-amber-400">Production release at risk</p>
         <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
-          SSO login loop (847 users affected) + CSV export failures are impacting 2 enterprise accounts worth{" "}
-          <span className="font-semibold text-red-400">$21.3k MRR</span>. Churn risk is elevated.
+          30 items in Staging + 15 In Review need QA sign-off before production can ship.{" "}
+          <span className="font-semibold text-amber-400">TL-2720</span> (production readiness checklist) is still in Todo — run the team sync to unblock.
         </p>
       </div>
-      <ChevronRight size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
+      <ChevronRight size={16} className="text-amber-400 flex-shrink-0 mt-0.5" />
     </div>
   );
 }
 
 function StatsRow() {
-  const criticalBugs = openBugs.filter((b) => b.priority === "critical").length;
-  const escalated = escalatedTickets.length;
-  const mrrAtRisk = escalatedTickets.reduce((s, t) => s + (t.mrr ?? 0), 0);
+  const highPriBugs = openBugs.filter((b) => b.priority === "high" || b.priority === "critical").length;
+  const stagingCount = productItems.filter((i) => i.status === "ready_qa").length;
+  const inProgressCount = productItems.filter((i) => i.status === "in_progress").length;
 
   return (
     <div className="grid grid-cols-4 gap-4 mb-6">
       <StatCard
-        label="Features Shipped (7d)"
+        label="Features Shipped"
         value={featuresShipped.length}
         icon={<Rocket size={16} />}
         accent="var(--success)"
-        sublabel="On track this sprint"
+        sublabel="Recently completed"
       />
       <StatCard
         label="Open Bugs"
         value={openBugs.length}
-        delta={`${criticalBugs} critical`}
+        delta={`${highPriBugs} high priority`}
         deltaPositive={false}
         icon={<Bug size={16} />}
         accent="var(--danger)"
       />
       <StatCard
-        label="Escalated Tickets"
-        value={escalated}
+        label="In Staging (QA)"
+        value={stagingCount}
         icon={<MessageSquare size={16} />}
         accent="var(--warning)"
-        sublabel={`$${(mrrAtRisk / 1000).toFixed(1)}k MRR at risk`}
+        sublabel={`+ ${inProgressCount} in progress`}
       />
       <StatCard
-        label="Feature Requests"
-        value={featureRequests.length}
-        delta="2 new this week"
-        deltaPositive={false}
+        label="Intercom Conversations"
+        value={0}
         icon={<Lightbulb size={16} />}
         accent="var(--info)"
+        sublabel="Workspace configured — no tickets yet"
       />
     </div>
   );
@@ -207,45 +207,29 @@ function OpenBugsCard() {
 }
 
 function EscalatedTicketsCard() {
-  const totalMrr = escalatedTickets.reduce((s, t) => s + (t.mrr ?? 0), 0);
   return (
     <Card>
       <CardHeader
-        title="Escalated Support Tickets"
-        subtitle={`${escalatedTickets.length} escalated · $${(totalMrr / 1000).toFixed(1)}k MRR at risk`}
+        title="Support Tickets (Intercom)"
+        subtitle="Synced from Intercom"
         icon={<AlertTriangle size={16} className="text-amber-400" />}
       />
       <Divider />
-      <div className="divide-y" style={{ borderColor: "var(--border-subtle)" }}>
-        {escalatedTickets.map((ticket) => (
-          <div
-            key={ticket.id}
-            className="flex items-start gap-4 px-5 py-3.5 hover:bg-white/[0.02] transition-colors"
-          >
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                <PriorityBadge priority={ticket.priority} />
-                <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
-                  {ticket.title}
-                </span>
-              </div>
-              <div className="flex items-center gap-3 mt-1 flex-wrap">
-                <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
-                  {ticket.customer}
-                </span>
-                <Badge variant="neutral">{ticket.category}</Badge>
-                {ticket.mrr && (
-                  <span className="text-xs font-semibold" style={{ color: "var(--warning)" }}>
-                    ${ticket.mrr.toLocaleString()}/mo
-                  </span>
-                )}
-              </div>
-            </div>
-            <span className="text-[11px] flex-shrink-0" style={{ color: "var(--text-tertiary)" }}>
-              {formatDistanceToNow(new Date(ticket.escalatedAt), { addSuffix: true })}
-            </span>
-          </div>
-        ))}
+      <div className="px-5 py-8 flex flex-col items-center justify-center text-center">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
+          style={{ background: "rgba(34,197,94,0.1)" }}>
+          <MessageSquare size={18} className="text-green-400" />
+        </div>
+        <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+          No open tickets
+        </p>
+        <p className="text-xs mt-1 max-w-[220px]" style={{ color: "var(--text-secondary)" }}>
+          Intercom workspace configured on June 13. Awaiting first real customer conversations.
+        </p>
+        <span className="mt-3 text-[11px] px-2 py-1 rounded-md font-medium"
+          style={{ background: "rgba(34,197,94,0.1)", color: "var(--success)" }}>
+          Workspace operational
+        </span>
       </div>
     </Card>
   );
