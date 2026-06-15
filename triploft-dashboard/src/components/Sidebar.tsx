@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Headphones,
   LayoutDashboard,
   Layers,
   MessageSquareHeart,
@@ -16,6 +17,7 @@ const navItems = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
   { href: "/product", label: "Product", icon: Layers },
   { href: "/customer-voice", label: "Customer Voice", icon: MessageSquareHeart },
+  { href: "/support", label: "Support", icon: Headphones },
   { href: "/executive-feed", label: "Exec Feed", icon: Radio },
   { href: "/ai-insights", label: "AI Insights", icon: Sparkles },
 ];

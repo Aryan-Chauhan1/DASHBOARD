@@ -465,6 +465,17 @@ export const productItems: ProductItem[] = [
   },
 ];
 
+// ─── BUG MODULE BREAKDOWN ────────────────────────────────────────────────────
+// Derived from real openBugs — categorized by product area
+
+export const bugsByModule: { module: string; count: number; color: string }[] = [
+  { module: "Payments", count: 2, color: "#ef4444" },   // TL-2740, TL-2723
+  { module: "MMS/Email", count: 2, color: "#f59e0b" },  // MAG-188–194, MAG-199
+  { module: "Forms", count: 1, color: "#6366f1" },       // TL-2721
+  { module: "Portal", count: 1, color: "#3b82f6" },      // TL-2658
+  { module: "Tasks", count: 1, color: "#22c55e" },       // TL-2739
+];
+
 // ─── CUSTOMER VOICE ───────────────────────────────────────────────────────────
 // Intercom is not yet live with real customers.
 // Below reflects internal/early feedback from the team and any beta testers.
@@ -559,45 +570,20 @@ export const sentimentData: SentimentData = {
   score: 72,
   change: 0,
   breakdown: { positive: 60, neutral: 25, negative: 15 },
-  recentFeedback: [
-    {
-      text: "The RBAC activity log is exactly what we needed for compliance — clean implementation.",
-      sentiment: "positive",
-      source: "Internal",
-      date: "2026-06-13",
-    },
-    {
-      text: "Proposal bugs keep coming back. We've had 3 batches in the last month.",
-      sentiment: "negative",
-      source: "Internal",
-      date: "2026-06-14",
-    },
-    {
-      text: "ALG is a game changer for the ops team — saves hours per trip.",
-      sentiment: "positive",
-      source: "Internal",
-      date: "2026-06-10",
-    },
-    {
-      text: "The staging queue (30 items) is getting overwhelming — hard to know what to QA first.",
-      sentiment: "negative",
-      source: "Internal",
-      date: "2026-06-14",
-    },
-    {
-      text: "Intercom is set up. Excited to get real customer conversations flowing in.",
-      sentiment: "positive",
-      source: "Internal",
-      date: "2026-06-13",
-    },
-    {
-      text: "MMS timezone bugs are tricky — good that Israel is consolidating them into one pass.",
-      sentiment: "neutral",
-      source: "Internal",
-      date: "2026-06-12",
-    },
-  ],
+  recentFeedback: [],
 };
+
+// ─── MENTIONED AREAS ─────────────────────────────────────────────────────────
+// Derived from openBugs + topComplaints counts
+
+export const mentionedAreas: { area: string; count: number; color: string }[] = [
+  { area: "Proposals", count: 6, color: "#6366f1" },
+  { area: "MMS/Email", count: 5, color: "#f59e0b" },
+  { area: "Payments", count: 4, color: "#ef4444" },
+  { area: "Portal", count: 3, color: "#3b82f6" },
+  { area: "Process", count: 3, color: "#555570" },
+  { area: "Tasks", count: 1, color: "#22c55e" },
+];
 
 // ─── EXECUTIVE FEED ──────────────────────────────────────────────────────────
 // Events derived from Linear issue updates + Intercom setup
