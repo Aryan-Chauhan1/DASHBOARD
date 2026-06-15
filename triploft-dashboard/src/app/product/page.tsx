@@ -1,6 +1,5 @@
 import {
   AlertCircle,
-  Bug,
   CheckCircle2,
   Circle,
   Clock,
@@ -8,10 +7,10 @@ import {
   Tag,
   User,
 } from "lucide-react";
+import Link from "next/link";
 import { Card, CardHeader, Divider } from "@/components/Card";
 import { Badge, PriorityBadge } from "@/components/Badge";
-import { productItems, bugsByModule, openBugs, type ProductItem } from "@/lib/data";
-import { VerticalBarChart } from "@/components/Charts";
+import { productItems, type ProductItem } from "@/lib/data";
 
 type Column = "in_progress" | "blocked" | "ready_qa" | "released";
 
@@ -179,28 +178,6 @@ function SummaryBar() {
   );
 }
 
-function BugsByModuleCard() {
-  const criticalCount = openBugs.filter((b) => b.priority === "critical" || b.priority === "high").length;
-  return (
-    <Card>
-      <CardHeader
-        title="Bugs by module"
-        subtitle="Open count per module"
-        icon={<Bug size={16} className="text-red-400" />}
-        action={
-          <span className="text-xs px-2 py-1 rounded-md" style={{ background: "var(--surface-2)", color: "var(--text-tertiary)" }}>
-            {openBugs.length} open · {criticalCount} high+
-          </span>
-        }
-      />
-      <Divider />
-      <div className="px-5 pt-2 pb-4">
-        <VerticalBarChart data={bugsByModule.map((b) => ({ label: b.module, count: b.count, color: b.color }))} />
-      </div>
-    </Card>
-  );
-}
-
 export default function ProductPage() {
   return (
     <div className="px-8 py-6 max-w-7xl mx-auto">
@@ -211,10 +188,9 @@ export default function ProductPage() {
         <p className="text-sm mt-0.5" style={{ color: "var(--text-secondary)" }}>
           Current sprint status across all teams
         </p>
-      </div>
-
-      <div className="mb-5">
-        <BugsByModuleCard />
+        <Link href="/bugs" className="text-xs font-medium hover:underline" style={{ color: "var(--accent)" }}>
+          View bugs by module →
+        </Link>
       </div>
 
       <SummaryBar />

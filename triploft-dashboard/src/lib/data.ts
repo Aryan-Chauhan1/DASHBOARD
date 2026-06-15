@@ -22,6 +22,7 @@ export interface Bug {
   createdAt: string;
   assignee?: string;
   linearId?: string;
+  module: string;
 }
 
 export interface SupportTicket {
@@ -58,31 +59,6 @@ export interface ProductItem {
   team: string;
   labels: string[];
   linearId?: string;
-}
-
-export interface Complaint {
-  id: string;
-  text: string;
-  count: number;
-  trend: "rising" | "stable" | "declining";
-  category: string;
-  severity: "high" | "medium" | "low";
-}
-
-export interface RequestedFeature {
-  id: string;
-  title: string;
-  votes: number;
-  mrr: number;
-  category: string;
-  trend: "rising" | "stable" | "declining";
-}
-
-export interface SentimentData {
-  score: number;
-  change: number;
-  breakdown: { positive: number; neutral: number; negative: number };
-  recentFeedback: { text: string; sentiment: Sentiment; source: string; date: string }[];
 }
 
 export interface TimelineEvent {
@@ -151,6 +127,7 @@ export const openBugs: Bug[] = [
     createdAt: "2026-06-14T00:00:00Z",
     assignee: "Aryan",
     linearId: "TL-2739",
+    module: "Tasks",
   },
   {
     id: "b2",
@@ -162,6 +139,7 @@ export const openBugs: Bug[] = [
     createdAt: "2026-06-13T00:00:00Z",
     assignee: "Emmanuel",
     linearId: "TL-2740",
+    module: "Payments",
   },
   {
     id: "b3",
@@ -173,6 +151,7 @@ export const openBugs: Bug[] = [
     createdAt: "2026-06-10T00:00:00Z",
     assignee: "Shivam",
     linearId: "TL-2721",
+    module: "Forms",
   },
   {
     id: "b4",
@@ -184,6 +163,7 @@ export const openBugs: Bug[] = [
     createdAt: "2026-06-09T00:00:00Z",
     assignee: "Israel Ebenezer",
     linearId: "TL-2723",
+    module: "Automations",
   },
   {
     id: "b5",
@@ -195,6 +175,7 @@ export const openBugs: Bug[] = [
     createdAt: "2026-06-08T00:00:00Z",
     assignee: "Israel Ebenezer",
     linearId: "MAG-188–194",
+    module: "MMS/Email",
   },
   {
     id: "b6",
@@ -206,6 +187,7 @@ export const openBugs: Bug[] = [
     createdAt: "2026-06-07T00:00:00Z",
     assignee: "Shivam",
     linearId: "TL-2658",
+    module: "Client Portal",
   },
   {
     id: "b7",
@@ -217,6 +199,7 @@ export const openBugs: Bug[] = [
     createdAt: "2026-06-06T00:00:00Z",
     assignee: "Israel Ebenezer",
     linearId: "MAG-199",
+    module: "MMS/Email",
   },
 ];
 
@@ -465,125 +448,37 @@ export const productItems: ProductItem[] = [
   },
 ];
 
-// ─── BUG MODULE BREAKDOWN ────────────────────────────────────────────────────
-// Derived from real openBugs — categorized by product area
+// ─── BUG MODULE UTILITIES ────────────────────────────────────────────────────
 
-export const bugsByModule: { module: string; count: number; color: string }[] = [
-  { module: "Payments", count: 2, color: "#ef4444" },   // TL-2740, TL-2723
-  { module: "MMS/Email", count: 2, color: "#f59e0b" },  // MAG-188–194, MAG-199
-  { module: "Forms", count: 1, color: "#6366f1" },       // TL-2721
-  { module: "Portal", count: 1, color: "#3b82f6" },      // TL-2658
-  { module: "Tasks", count: 1, color: "#22c55e" },       // TL-2739
-];
-
-// ─── CUSTOMER VOICE ───────────────────────────────────────────────────────────
-// Intercom is not yet live with real customers.
-// Below reflects internal/early feedback from the team and any beta testers.
-
-export const topComplaints: Complaint[] = [
-  {
-    id: "c1",
-    text: "Proposal editor has recurring bugs — every batch introduces new regressions",
-    count: 4,
-    trend: "rising",
-    category: "Proposals",
-    severity: "high",
-  },
-  {
-    id: "c2",
-    text: "Staging queue too large — 30 items make it hard to track what's actually ready",
-    count: 3,
-    trend: "rising",
-    category: "Process",
-    severity: "high",
-  },
-  {
-    id: "c3",
-    text: "MMS date/timezone handling is inconsistent across surfaces",
-    count: 3,
-    trend: "stable",
-    category: "MAGgie / MMS",
-    severity: "medium",
-  },
-  {
-    id: "c4",
-    text: "Client portal inline options feel incomplete — selection UX needs polish",
-    count: 2,
-    trend: "stable",
-    category: "Client Portal",
-    severity: "medium",
-  },
-  {
-    id: "c5",
-    text: "Invoice and payment flows have UX issues that block agent workflows",
-    count: 2,
-    trend: "stable",
-    category: "Payments",
-    severity: "medium",
-  },
-];
-
-export const requestedFeatures: RequestedFeature[] = [
-  {
-    id: "rf1",
-    title: "Booking Import with packaged pricing",
-    votes: 3,
-    mrr: 0,
-    category: "Bookings",
-    trend: "rising",
-  },
-  {
-    id: "rf2",
-    title: "Itemized pricing in packages",
-    votes: 2,
-    mrr: 0,
-    category: "Pricing",
-    trend: "stable",
-  },
-  {
-    id: "rf3",
-    title: "Auto-assign travelers to new proposal components",
-    votes: 2,
-    mrr: 0,
-    category: "Proposals",
-    trend: "rising",
-  },
-  {
-    id: "rf4",
-    title: "Payment-authorization confirmation emails to agents",
-    votes: 2,
-    mrr: 0,
-    category: "Automations",
-    trend: "stable",
-  },
-  {
-    id: "rf5",
-    title: "Global search with Attio-style contextual preview",
-    votes: 1,
-    mrr: 0,
-    category: "Search / UX",
-    trend: "rising",
-  },
-];
-
-export const sentimentData: SentimentData = {
-  score: 72,
-  change: 0,
-  breakdown: { positive: 60, neutral: 25, negative: 15 },
-  recentFeedback: [],
+// Color palette for modules (auto-assigned by key; unknown modules get accent color)
+const MODULE_COLORS: Record<string, string> = {
+  Payments: "#ef4444",
+  "MMS/Email": "#f59e0b",
+  Forms: "#6366f1",
+  "Client Portal": "#3b82f6",
+  Tasks: "#22c55e",
+  Automations: "#8b5cf6",
 };
 
-// ─── MENTIONED AREAS ─────────────────────────────────────────────────────────
-// Derived from openBugs + topComplaints counts
+export function moduleSlug(module: string): string {
+  return module.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
 
-export const mentionedAreas: { area: string; count: number; color: string }[] = [
-  { area: "Proposals", count: 6, color: "#6366f1" },
-  { area: "MMS/Email", count: 5, color: "#f59e0b" },
-  { area: "Payments", count: 4, color: "#ef4444" },
-  { area: "Portal", count: 3, color: "#3b82f6" },
-  { area: "Process", count: 3, color: "#555570" },
-  { area: "Tasks", count: 1, color: "#22c55e" },
-];
+export function getBugsByModule(
+  bugs: Bug[]
+): { module: string; count: number; color: string }[] {
+  const counts = bugs.reduce<Record<string, number>>((acc, b) => {
+    acc[b.module] = (acc[b.module] ?? 0) + 1;
+    return acc;
+  }, {});
+  return Object.entries(counts)
+    .map(([module, count]) => ({
+      module,
+      count,
+      color: MODULE_COLORS[module] ?? "#6366f1",
+    }))
+    .sort((a, b) => b.count - a.count);
+}
 
 // ─── EXECUTIVE FEED ──────────────────────────────────────────────────────────
 // Events derived from Linear issue updates + Intercom setup

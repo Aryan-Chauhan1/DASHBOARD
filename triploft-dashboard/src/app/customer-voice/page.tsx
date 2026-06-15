@@ -1,6 +1,6 @@
 import { AlertTriangle, ArrowUp, Filter } from "lucide-react";
 import { Card, CardHeader, Divider } from "@/components/Card";
-import { requestedFeatures, topComplaints, sentimentData, mentionedAreas } from "@/lib/data";
+import { featureRequests, openBugs, getBugsByModule } from "@/lib/data";
 import { VerticalBarChart, DonutChart } from "@/components/Charts";
 
 const PAIN_COLORS = ["#6366f1", "#ef4444", "#22c55e", "#f59e0b", "#3b82f6"];
@@ -47,7 +47,7 @@ function TopRequestedCard() {
       />
       <Divider />
       <HorizontalBarList
-        items={requestedFeatures.map((r) => ({ id: r.id, label: r.title, count: r.votes }))}
+        items={featureRequests.map((r) => ({ id: r.id, label: r.title, count: r.votes }))}
         getColor={() => "#6366f1"}
       />
     </Card>
@@ -55,6 +55,7 @@ function TopRequestedCard() {
 }
 
 function TopPainPointsCard() {
+  const moduleData = getBugsByModule(openBugs);
   return (
     <Card>
       <CardHeader
@@ -64,7 +65,7 @@ function TopPainPointsCard() {
       />
       <Divider />
       <HorizontalBarList
-        items={topComplaints.map((c) => ({ id: c.id, label: c.text, count: c.count }))}
+        items={moduleData.map((m, i) => ({ id: String(i), label: m.module, count: m.count }))}
         getColor={(i) => PAIN_COLORS[i % PAIN_COLORS.length]}
       />
     </Card>
@@ -72,11 +73,10 @@ function TopPainPointsCard() {
 }
 
 function SentimentCard() {
-  const { breakdown } = sentimentData;
-  const donutData = [
-    { label: "Positive", value: breakdown.positive, color: "#22c55e" },
-    { label: "Neutral", value: breakdown.neutral, color: "#555570" },
-    { label: "Negative", value: breakdown.negative, color: "#ef4444" },
+  const donutData: { label: string; value: number; color: string }[] = [
+    { label: "Positive", value: 0, color: "#22c55e" },
+    { label: "Neutral", value: 0, color: "#555570" },
+    { label: "Negative", value: 0, color: "#ef4444" },
   ];
 
   return (
@@ -108,6 +108,7 @@ function SentimentCard() {
 }
 
 function MostMentionedCard() {
+  const moduleData = getBugsByModule(openBugs);
   return (
     <Card>
       <CardHeader
@@ -117,7 +118,7 @@ function MostMentionedCard() {
       />
       <Divider />
       <div className="px-5 pt-2 pb-4">
-        <VerticalBarChart data={mentionedAreas.map((a) => ({ label: a.area, count: a.count, color: a.color }))} />
+        <VerticalBarChart data={moduleData.map((m) => ({ label: m.module, count: m.count, color: m.color }))} />
       </div>
     </Card>
   );

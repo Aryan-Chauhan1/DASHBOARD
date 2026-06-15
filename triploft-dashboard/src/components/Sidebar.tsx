@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Bug as BugIcon,
   Headphones,
   LayoutDashboard,
   Layers,
@@ -12,10 +13,12 @@ import {
   Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
   { href: "/product", label: "Product", icon: Layers },
+  { href: "/bugs", label: "Bugs", icon: BugIcon },
   { href: "/customer-voice", label: "Customer Voice", icon: MessageSquareHeart },
   { href: "/support", label: "Support", icon: Headphones },
   { href: "/executive-feed", label: "Exec Feed", icon: Radio },
@@ -79,12 +82,13 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="px-5 py-4 border-t" style={{ borderColor: "var(--border)" }}>
-        <p className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>
-          Last synced just now
-        </p>
-        <div className="flex items-center gap-1.5 mt-1">
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--success)" }} />
-          <span className="text-[11px]" style={{ color: "var(--text-secondary)" }}>All systems operational</span>
+        <ThemeToggle />
+        <div className="mt-3">
+          <p className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>Last synced just now</p>
+          <div className="flex items-center gap-1.5 mt-1">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--success)" }} />
+            <span className="text-[11px]" style={{ color: "var(--text-secondary)" }}>All systems operational</span>
+          </div>
         </div>
       </div>
     </aside>

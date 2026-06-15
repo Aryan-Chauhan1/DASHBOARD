@@ -18,6 +18,24 @@
   --info: #3b82f6;
 }
 
+[data-theme="light"] {
+  --background: #f4f4fb;
+  --surface: #ffffff;
+  --surface-2: #ededf8;
+  --surface-3: #e4e4f0;
+  --border: #d8d8ea;
+  --border-subtle: #e8e8f4;
+  --text-primary: #18182e;
+  --text-secondary: #52527a;
+  --text-tertiary: #8888aa;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #2563eb;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--text-primary);
